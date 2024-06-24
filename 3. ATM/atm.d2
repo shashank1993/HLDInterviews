@@ -1,0 +1,31 @@
+user: {
+
+}
+
+AtmMachine: {
+    label: "ATM Machine"
+}
+user -> AtmMachine
+AtmMachine -> Card Authentication Service: key, pin
+AtmMachine -> Bank Authentication Service
+Bank Authentication Service -> AtmMachine: userId, sessionId
+Bank Authentication Service -> Session Manager: start session
+Gateway -> Session Manager
+Session Manager -> Session Store
+Session Store: {
+
+}
+Session Store.comment: |md
+    Redis
+|
+Gateway.comment: |md
+    ### Gateway
+    ### 1. check expiry of token
+    ### 2. rate limiting
+    ### 3. Fraud Detection
+    ### 4. User details
+|
+
+Gateway -> Bank Account Details
+Bank Account Details -> AtmMachine
+Bank Account Details -> RDBMS

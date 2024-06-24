@@ -1,0 +1,88 @@
+RentalService
+
+
+RentalService.comment: |md
+    ### makeReservation
+    ### pickUp(Reservation, Office)
+    ### return(Reservation, Office)
+|
+
+CarRentalApplication: {
+}
+
+CarRentalApplication.comment: |md
+        ### reserve
+        ### collect
+|
+
+
+ReservationService
+
+ReservationService.comment: |md
+    ### reserve(RR): RR
+    ### getReservation(office, date)
+    ### Get office at city, check inventory, make reservation id
+    ### Tell office about reservation
+|
+
+RentalService -> ReservationService
+ReservationService -> ReservationDB
+
+ReservationDB: {
+    shape: cylinder
+}
+
+OfficeManagerService: {
+}
+
+OfficeManagerService.comment: |md
+    ### addOffice
+    ### provideVehicle
+    ### collectVehicle
+|
+
+OfficeRecord: {
+    shape: cylinder
+}
+
+OfficeManagerService -> OfficeRecord
+
+InventoryService : {
+
+}
+
+InventoryService.comment: |md
+    ### getInventory
+    ### bookInventory
+    ### getCarDetails
+|
+
+ReservationService -> InventoryService
+OfficeManagerService -> InventoryService
+
+
+ReservationResponse: {
+    shape: class
+    reservationId
+}
+
+ReservationRequest: {
+    shape: class
+    pickUp: Location
+    drop: Location
+    pickupTime: Date
+    dropTime: Date
+}
+
+Location: {
+    shape: class
+    name: String
+    city: String
+}
+
+office: {
+    shape: class
+    location
+    availability
+
+}

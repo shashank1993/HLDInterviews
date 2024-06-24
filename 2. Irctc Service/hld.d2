@@ -1,0 +1,75 @@
+user: {
+
+}
+
+network: {
+    searchService: {
+
+    }
+    searchService.comment : |md
+        ## High TPS service
+    |
+
+    cache: {
+        shape: cylinder
+    }
+
+    searchService -> cache
+
+    searchDatabase: {
+        shape: cylinder
+    }
+    searchDatabase.comment: | md
+        ## trainNo:string, route:List-String,
+        ## scheduleInfo:ScheduleInfo
+        ## date: Date, startTime:DateTime
+    |
+    searchService -> searchDatabase
+
+    inventoryService: {
+
+    }
+
+    inventoryTables: {
+        shape: cylinder
+    }
+    inventoryService -> inventoryTables
+
+    bookingDetails: {
+
+    }
+
+    bookingDetailsDB: {
+        shape: cylinder
+    }
+
+    bookingDetails -> bookingDetailsDB
+
+    bookingDetailsDB -> inventoryTables: Replication
+
+    paymentService: {
+
+    }
+
+    bookingDetails -> paymentService
+    paymentService -> bookingDetailsDB: update status
+    paymentService -> paymentProvider
+
+    confirmation: {
+
+    }
+
+    bookingDetails -> confirmation
+    confirmation -> seatAllotmentService
+
+    seatAllotmentService.comment: |md
+        ## Alot Seat number
+    |
+
+}
+
+user -> network.searchService: src, dest, date, list of class
+
+user -> network.inventoryService
+user -> network.bookingDetails
+
