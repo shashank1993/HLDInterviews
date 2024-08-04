@@ -1,0 +1,440 @@
+orderCreateJourney: {
+ style.fill: aliceblue
+ validatorService: {
+   style.fill: bisque
+ }
+ validatorService.comment: |md
+   ### custom order request validations
+ |
+
+
+ cartService: {
+   style.fill: bisque
+ }
+ cartService.comment: |md
+   ### get cart details
+ |
+
+
+ bankOfferService: {
+   style.fill: bisque
+ }
+
+
+ bankOfferService.comment: |md
+   ### add cardHash entry
+ |
+
+
+ cartValidatorService: {
+   style.fill: bisque
+ }
+
+
+ cartruleService: {
+   style.fill: bisque
+ }
+
+
+ cartruleService.comment: |md
+   ### increment cartrule/coupon usages
+ |
+
+
+ tradeSchemeService: {
+   style.fill: bisque
+ }
+
+
+ tradeSchemeService.comment: |md
+   ### trigger the consumption of trade scheme
+ |
+
+
+ giftcardService: {
+   style.fill: bisque
+ }
+
+
+ giftcardService.comment: |md
+   ### check giftcard balance
+ |
+
+
+ orderService: {
+   style.fill: bisque
+ }
+
+
+ orderService.comment: |md
+   ### create pending order
+ |
+
+
+ inventoryService: {
+   style.fill: bisque
+ }
+
+
+ inventoryService.comment: |md
+   ### decrement inventory
+ |
+
+
+ vaultService: {
+   style.fill: bisque
+ }
+
+
+ vaultService.comment: |md
+   ### redeem nykaa rewards
+ |
+ paymentService: {
+   style.fill: bisque
+ }
+
+
+ paymentService.comment: |md
+   ### create payment entry
+ |
+
+
+ validatorService -> cartService -> bankOfferService -> cartValidatorService -> cartruleService -> tradeSchemeService
+ tradeSchemeService -> giftcardService -> orderService -> inventoryService -> vaultService -> paymentService
+}
+
+
+– AS per scope only adding relevant services
+
+
+orderCreateJourney: {
+ grid-columns: 6
+ style.fill: aliceblue
+
+
+ cartService: {
+   style.fill: bisque
+ }
+ cartService.comment: |md
+   ### get cart details
+ |
+
+
+ orderService: {
+   style.fill: bisque
+ }
+
+
+ orderService.comment: |md
+   ### create pending order
+ |
+
+
+ inventoryService: {
+   style.fill: bisque
+ }
+
+
+ inventoryService.comment: |md
+   ### decrement inventory
+ |
+
+
+ vaultService: {
+   style.fill: bisque
+ }
+
+
+ vaultService.comment: |md
+   ### redeem nykaa rewards
+ |
+ paymentService: {
+   style.fill: bisque
+ }
+
+
+ paymentService.comment: |md
+   ### create payment entry
+ |
+
+
+ cartService -> orderService -> inventoryService -> vaultService -> paymentService
+}
+
+
+
+
+Post service
+
+
+postOrderJourney: {
+ grid-columns: 5
+ style.fill: aliceblue
+
+
+ paymentService: {
+   style.fill: bisque
+ }
+ paymentService.comment: |md
+   ### check payment status
+ |
+
+
+ vaultService: {
+   style.fill: bisque
+ }
+
+
+ vaultService.comment: |md
+   ### redeem cancel nykaa rewards
+ |
+
+
+ orderService: {
+   style.fill: bisque
+ }
+
+
+ orderService.comment: |md
+   ### update order status
+ |
+
+
+ cartruleService: {
+   style.fill: bisque
+ }
+
+
+ cartruleService.comment: |md
+   ### decrement cartrule/coupon usages
+ |
+ cartService: {
+   style.fill: bisque
+ }
+
+
+ cartService.comment: |md
+   ### deactivate cart
+ |
+
+
+ paymentService -> vaultService -> orderService -> cartruleService -> cartService
+}
+
+
+Pre service with priority based services
+
+orderCreateJourney: {
+ grid-columns: 6
+ style.fill: aliceblue
+
+
+ cartService: {
+   style.fill: lightpink
+   style.double-border: true
+ }
+ cartService.comment: |md
+   ### get cart details
+ |
+
+
+ orderService: {
+   style.fill: lightpink
+   style.double-border: true
+ }
+
+
+ orderService.comment: |md
+   ### create pending order
+ |
+
+
+ inventoryService: {
+   style.fill: bisque
+ }
+
+
+ inventoryService.comment: |md
+   ### decrement inventory
+ |
+
+
+ vaultService: {
+   style.fill: bisque
+ }
+
+
+ vaultService.comment: |md
+   ### redeem nykaa rewards
+ |
+ paymentService: {
+   style.fill: bisque
+ }
+
+
+ paymentService.comment: |md
+   ### create payment entry
+ |
+
+
+ cartService -> orderService -> inventoryService -> vaultService -> paymentService
+}
+
+
+
+Solution Diagram:
+
+orderCreateJourney: {
+ grid-columns: 6
+ style.fill: aliceblue
+
+
+ cartService: {
+   style.fill: lightpink
+   style.double-border: true
+ }
+ cartService.comment: |md
+   ### get cart details
+ |
+
+
+ orderService: {
+   style.fill: lightpink
+   style.double-border: true
+ }
+
+
+ orderService.comment: |md
+   ### create pending order
+ |
+
+
+ inventoryService: {
+   style.fill: bisque
+ }
+
+
+ inventoryService.comment: |md
+   ### decrement inventory
+ |
+
+
+ vaultService: {
+   style.fill: bisque
+ }
+
+
+ vaultService.comment: |md
+   ### redeem nykaa rewards
+ |
+ paymentService: {
+   style.fill: bisque
+ }
+
+
+ paymentService.comment: |md
+   ### create payment entry
+ |
+
+
+ cartService -> orderService -> inventoryService -> vaultService -> paymentService
+}
+
+
+orderCreateJourney -> queue
+
+
+queue: {
+ shape: cylinder
+ label: queue
+}
+
+
+queue.comment: |md
+ ## { failingServices : { Inventory, Serviciability, Payment}, "orderId": "NYK-1234-567"}
+
+
+|
+
+
+queue -> checkoutListener
+checkoutListener: {
+ style.fill: lightblue
+}
+checkoutListener.comment: |md
+ ### start listening when circuit breaker is closed for all services
+|
+
+
+
+
+OMS State temporary
+
+Checkout -> OMS_STATUS_PENDING_PROCESSING: OMS
+Checkout: {
+ style.fill: lightgreen
+}
+
+
+Checkout -> queue -> Checkout_Listener
+Checkout_Listener -> OMS_STATUS_PROCESSING: OMS
+queue: {
+ shape: cylinder
+}
+Checkout_Listener: {
+ style.fill: lightgreen
+}
+
+
+Checkout_Listener.comment: |md
+ ### After re-processing failed services
+|
+
+
+
+
+
+
+Diagram 2
+
+
+Checkout -> OMS_STATUS_PENDING_PROCESSING: Before processing
+Checkout: {
+ style.fill: lightgreen
+}
+Checkout -> OMS_STATUS_PROCESSING: After processing all services
+
+
+
+
+Checkout Listener
+
+
+@startuml
+alt circuitBreakers are closed 
+ group for each failing service
+  Listner -> FailingService: Call to execute transaction
+ end
+ alt All failing services successful
+  Listner -> OMS: set status PROCESSING
+ else Any service failed
+  Listner -> SuccessfulService: Rollback all successful services
+  Listner -> OMS: set status ON_HOLD_FAILED
+ end
+ 
+else circuitBreakers are not closed 
+  Listner -> Listner: Wait for retry interval
+  
+end
+
+
+@enduml
+
+
+
+
+
+
+
+
+
